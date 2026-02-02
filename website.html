@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokopaedi - Khilaf Itu Indah</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981', // Emerald 500
+                        secondary: '#14b8a6', // Teal 500
+                        dark: '#0f172a', // Slate 900
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Style -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            /* Pola Latar Belakang Dot Pattern */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Smooth Animations */
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        .toast-enter {
+            animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .toast-exit {
+            animation: fadeOut 0.3s ease-out forwards;
+        }
+
+        /* Custom Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Modal Animation */
+        .fade-in { animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Product Image Hover Zoom */
+        .product-img-container {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
+        }
+        .product-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; object-position: top center;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .group:hover .product-img { transform: scale(1.08); }
+
+        /* Card Glow Effect on Hover */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.2);
+            border-color: #a7f3d0;
+        }
+        
+        /* New Transaction Highlight */
+        @keyframes highlightRow {
+            0% { background-color: #dcfce7; transform: scale(1.01); }
+            100% { background-color: transparent; transform: scale(1); }
+        }
+        .new-transaction { animation: highlightRow 2s ease-out; }
+
+        /* Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Gradient Button */
+        .btn-gradient {
+            background: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #059669 0%, #0f766e 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Landing Page Styles */
+        #landing-page {
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+        }
+        .landing-hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col relative overflow-x-hidden">
+
+    <!-- LANDING PAGE -->
+    <div id="landing-page" class="fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center text-white overflow-hidden">
+        <!-- Animated Background Blobs -->
+        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-30 pointer-events-none">
+            <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-emerald-500 rounded-full blur-[100px] animate-float"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-teal-500 rounded-full blur-[100px] animate-float-delayed"></div>
+            <div class="absolute top-[40%] left-[60%] w-64 h-64 bg-cyan-600 rounded-full blur-[80px] animate-pulse-slow"></div>
+        </div>
+
+        <div class="relative z-10 text-center px-4 max-w-3xl">
+            <div class="mb-6 inline-flex items-center justify-center p-4 bg-white/10 backdrop-blur-md rounded-3xl border border-white/10 shadow-2xl animate-float">
+                <i data-lucide="shopping-bag" class="w-16 h-16 text-emerald-400"></i>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 tracking-tight drop-shadow-lg">
+                toko<span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">paedi</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-slate-300 mb-10 font-light max-w-2xl mx-auto leading-relaxed">
+                Portal dimensi menuju koleksi <span class="font-bold text-white">Action Figure</span> impian.<br>
+                Karena <span class="italic text-emerald-300">Khilaf itu Indah</span>.
+            </p>
+
+            <button onclick="enterSite()" class="group relative px-8 py-4 bg-white text-emerald-900 font-bold text-lg rounded-full shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)] hover:shadow-[0_0_60px_-10px_rgba(16,185,129,0.7)] transition-all duration-300 overflow-hidden transform hover:-translate-y-1">
+                <span class="relative z-10 flex items-center gap-2">
+                    Mulai Petualangan <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                </span>
+                <div class="absolute inset-0 bg-gradient-to-r from-emerald-300 to-teal-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+            
+            <div class="mt-12 flex items-center justify-center gap-8 text-slate-500 text-sm font-medium">
+                <div class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500"></i> 100% Original</div>
+                <div class="flex items-center gap-2"><i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i> Garansi Resmi</div>
+                <div class="flex items-center gap-2"><i data-lucide="truck" class="w-4 h-4 text-emerald-500"></i> Kirim Cepat</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar with Glass Effect -->
+    <nav class="sticky top-0 z-40 glass-nav shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <!-- Logo -->
+            <div class="flex items-center gap-2 cursor-pointer group" onclick="window.scrollTo(0,0); resetView();">
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-500 text-white p-1.5 rounded-lg group-hover:rotate-12 transition-transform">
+                    <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-tight text-slate-800">
+                    toko<span class="text-gradient">paedi</span>
+                </h1>
+            </div>
+
+            <!-- Search Bar (Desktop) -->
+            <div class="hidden md:flex flex-1 mx-12 relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i data-lucide="search" class="text-slate-400 w-5 h-5 group-focus-within:text-emerald-500 transition-colors"></i>
+                </div>
+                <input 
+                    type="text" 
+                    id="search-input"
+                    placeholder="Cari figure waifu, husbando, atau anime..." 
+                    class="w-full bg-slate-100/80 border border-slate-200 text-sm rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:bg-white transition-all shadow-inner"
+                    oninput="handleSearch(this.value)"
+                >
+            </div>
+
+            <!-- Icons & Menu -->
+            <div class="flex items-center gap-6">
+                <!-- Cart Icon Trigger -->
+                <div class="relative cursor-pointer text-slate-600 hover:text-emerald-600 transition-colors" onclick="toggleCart()">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                    <span id="cart-badge" class="hidden absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md transition-transform transform scale-0 border-2 border-white">
+                        0
+                    </span>
+                </div>
+                
+                <!-- Auth Section (Simple) -->
+                <div id="auth-section" class="hidden md:flex gap-3 text-sm font-semibold items-center">
+                    <button onclick="toggleModal('login-modal')" class="text-slate-600 hover:text-emerald-600 px-4 py-2 transition-colors font-bold">Masuk</button>
+                    <button onclick="toggleModal('register-modal')" class="btn-gradient text-white px-5 py-2 rounded-full font-bold shadow-lg shadow-emerald-500/20 transform hover:-translate-y-0.5 transition-all">Daftar</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed top-28 right-4 z-[90] flex flex-col gap-3 pointer-events-none"></div>
+
+    <!-- === MODALS === -->
+
+    <!-- LOGIN MODAL -->
+    <div id="login-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeModal('login-modal', event)">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-8 shadow-2xl relative fade-in border border-white/20" onclick="event.stopPropagation()">
+            <button onclick="toggleModal('login-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-800 transition bg-slate-100 rounded-full p-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Welcome Back!</h2>
+                <p class="text-slate-500 text-sm">Masuk untuk melanjutkan khilafmu.</p>
+            </div>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1.5 uppercase tracking-wide">Email</label>
+                        <input type="email" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" placeholder="sultan@wibu.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1.5 uppercase tracking-wide">Password</label>
+                        <input type="password" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="w-full btn-gradient text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg shadow-emerald-500/30">Masuk Sekarang</button>
+                </div>
+            </form>
+            <p class="text-center text-sm text-slate-500 mt-6">Belum punya akun? <span class="text-emerald-600 cursor-pointer font-bold hover:underline" onclick="switchAuthModal('register')">Daftar dulu</span></p>
+        </div>
+    </div>
+
+    <!-- REGISTER MODAL -->
+    <div id="register-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeModal('register-modal', event)">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-8 shadow-2xl relative fade-in" onclick="event.stopPropagation()">
+            <button onclick="toggleModal('register-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-800 transition bg-slate-100 rounded-full p-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 mb-2">Join Us!</h2>
+                <p class="text-slate-500 text-sm">Buat akun baru dan mulai koleksi.</p>
+            </div>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1.5 uppercase tracking-wide">Nama Lengkap</label>
+                        <input type="text" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" placeholder="Uzumaki Naruto" required>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1.5 uppercase tracking-wide">Email</label>
+                        <input type="email" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" placeholder="naruto@konoha.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1.5 uppercase tracking-wide">Password</label>
+                        <input type="password" class="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="w-full btn-gradient text-white font-bold py-3.5 rounded-xl mt-4 shadow-lg shadow-emerald-500/30">Daftar Sekarang</button>
+                </div>
+            </form>
+            <p class="text-center text-sm text-slate-500 mt-6">Sudah punya akun? <span class="text-emerald-600 cursor-pointer font-bold hover:underline" onclick="switchAuthModal('login')">Masuk</span></p>
+        </div>
+    </div>
+
+    <!-- ABOUT US MODAL -->
+    <div id="about-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeModal('about-modal', event)">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-0 shadow-2xl relative fade-in overflow-hidden" onclick="event.stopPropagation()">
+            <div class="h-32 bg-gradient-to-r from-emerald-500 to-teal-500 relative flex items-center justify-center">
+                <button onclick="toggleModal('about-modal')" class="absolute top-5 right-5 text-white/80 hover:text-white transition bg-white/20 rounded-full p-1.5 backdrop-blur-sm">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div class="text-center text-white">
+                    <h2 class="text-3xl font-extrabold tracking-tight">Tentang Tokopaedi</h2>
+                    <p class="text-emerald-100 text-sm mt-1">Platform Khilaf No. 1 Se-Isekai</p>
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <div class="space-y-6">
+                    <div class="flex items-start gap-4">
+                        <div class="bg-emerald-100 p-3 rounded-xl text-emerald-600 shrink-0">
+                            <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg mb-1">Misi Mulia Kami</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Tokopaedi hadir dengan satu tujuan suci: <strong>Mengkhilafkan seluruh wibu di Indonesia</strong> tanpa pandang bulu. Kami percaya bahwa setiap lemari pajangan yang kosong adalah sebuah dosa besar yang harus segera ditebus dengan pre-order figure terbaru.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="bg-blue-100 p-3 rounded-xl text-blue-600 shrink-0">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-lg mb-1">Jaminan Anti-Bootleg</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Kami mengharamkan barang KW! Semua figure yang kami jual 100% original, langsung dari Akihabara (via kurir gaib). Jika terbukti palsu, kami ganti 2x lipat dengan uang monopoli.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 mt-4">
+                        <h4 class="font-bold text-slate-800 mb-4 text-center">Tim Dibalik Layar</h4>
+                        <div class="grid grid-cols-3 gap-y-6 gap-x-2 text-center">
+                            <!-- Zacky -->
+                            <div class="flex flex-col items-center">
+                                <img src="https://ui-avatars.com/api/?name=Zacky&background=10b981&color=fff" class="w-12 h-12 rounded-full mb-2 border-2 border-white shadow-md transition hover:scale-110">
+                                <p class="text-xs font-bold text-slate-700">Zacky</p>
+                                <p class="text-[10px] text-slate-500">Founder & CEO</p>
+                            </div>
+                            <!-- Ahmad -->
+                            <div class="flex flex-col items-center">
+                                <img src="https://ui-avatars.com/api/?name=Ahmad&background=0ea5e9&color=fff" class="w-12 h-12 rounded-full mb-2 border-2 border-white shadow-md transition hover:scale-110">
+                                <p class="text-xs font-bold text-slate-700">Ahmad</p>
+                                <p class="text-[10px] text-slate-500">Tech Lead</p>
+                            </div>
+                            <!-- Galang -->
+                            <div class="flex flex-col items-center">
+                                <img src="https://ui-avatars.com/api/?name=Galang&background=f59e0b&color=fff" class="w-12 h-12 rounded-full mb-2 border-2 border-white shadow-md transition hover:scale-110">
+                                <p class="text-xs font-bold text-slate-700">Galang</p>
+                                <p class="text-[10px] text-slate-500">Creative Director</p>
+                            </div>
+                            <!-- Andre -->
+                            <div class="flex flex-col items-center">
+                                <img src="https://ui-avatars.com/api/?name=Andre&background=8b5cf6&color=fff" class="w-12 h-12 rounded-full mb-2 border-2 border-white shadow-md transition hover:scale-110">
+                                <p class="text-xs font-bold text-slate-700">Andre</p>
+                                <p class="text-[10px] text-slate-500">Marketing Guru</p>
+                            </div>
+                            <!-- M Aditya -->
+                            <div class="flex flex-col items-center">
+                                <img src="https://ui-avatars.com/api/?name=M+Aditya&background=ef4444&color=fff" class="w-12 h-12 rounded-full mb-2 border-2 border-white shadow-md transition hover:scale-110">
+                                <p class="text-xs font-bold text-slate-700">M Aditya</p>
+                                <p class="text-[10px] text-slate-500">Head of Operations</p>
+                            </div>
+                            <!-- Rio -->
+                            <div class="flex flex-col items-center">
+                                <img src="https://ui-avatars.com/api/?name=Rio&background=ec4899&color=fff" class="w-12 h-12 rounded-full mb-2 border-2 border-white shadow-md transition hover:scale-110">
+                                <p class="text-xs font-bold text-slate-700">Rio</p>
+                                <p class="text-[10px] text-slate-500">Customer Success</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button onclick="toggleModal('about-modal')" class="w-full btn-gradient text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-500/20">Siap Lanjut Khilaf!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRODUCT DETAIL MODAL -->
+    <div id="product-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeModal('product-modal', event)">
+        <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl relative flex flex-col md:flex-row fade-in" onclick="event.stopPropagation()">
+            <button onclick="toggleModal('product-modal')" class="absolute top-4 right-4 z-10 bg-white/80 backdrop-blur rounded-full p-2 text-slate-600 hover:bg-slate-100 hover:text-black transition shadow-sm border border-slate-200">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <!-- Left: Image -->
+            <div class="w-full md:w-1/2 bg-gradient-to-br from-slate-50 to-slate-200 flex items-center justify-center p-8 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#64748b 1px, transparent 1px); background-size: 20px 20px;"></div>
+                <img id="detail-image" src="" alt="Detail Product" referrerpolicy="no-referrer" class="relative z-10 max-h-[350px] md:max-h-[500px] w-full object-contain drop-shadow-2xl filter hover:brightness-105 transition duration-500">
+            </div>
+
+            <!-- Right: Details -->
+            <div class="w-full md:w-1/2 p-8 md:p-10 flex flex-col overflow-y-auto bg-white">
+                <div class="inline-flex items-center gap-2 mb-3">
+                    <span id="detail-anime" class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold tracking-wide uppercase">ANIME NAME</span>
+                    <span class="text-slate-300 text-xs">•</span>
+                    <span class="text-slate-400 text-xs font-medium">Original</span>
+                </div>
+                
+                <h2 id="detail-name" class="text-3xl md:text-4xl font-extrabold text-slate-800 mb-3 leading-tight tracking-tight">Product Name</h2>
+                
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="flex text-amber-400 gap-0.5">
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                    </div>
+                    <span id="detail-rating" class="text-slate-700 font-bold text-sm">4.9</span>
+                    <span class="text-slate-300">|</span>
+                    <span id="detail-sold" class="text-slate-500 text-sm">Terjual 100+</span>
+                </div>
+
+                <div id="detail-price" class="text-4xl font-bold text-emerald-600 mb-8 tracking-tight">Rp 0</div>
+
+                <div class="border-t border-slate-100 py-6 mb-4 flex-1">
+                    <h3 class="font-bold text-slate-800 mb-3 text-lg">Deskripsi Produk</h3>
+                    <p id="detail-desc" class="text-slate-600 text-base leading-relaxed">
+                        Lorem ipsum dolor sit amet.
+                    </p>
+                </div>
+
+                <div class="mt-auto pt-4">
+                    <button id="detail-btn-cart" class="w-full btn-gradient text-white font-bold py-4 rounded-2xl transition shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-2 group text-lg">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 group-hover:scale-110 transition-transform"></i> 
+                        Masukkan Keranjang
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART SIDEBAR -->
+    <div id="cart-overlay" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[50] hidden transition-opacity duration-300 opacity-0" onclick="toggleCart()"></div>
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] bg-white z-[55] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col border-l border-slate-100">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-white/80 backdrop-blur-md sticky top-0 z-10">
+            <h2 class="text-xl font-bold flex items-center gap-2 text-slate-800">
+                <div class="bg-emerald-100 p-1.5 rounded-lg text-emerald-600">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i> 
+                </div>
+                Keranjang Khilaf
+            </h2>
+            <button onclick="toggleCart()" class="p-2 hover:bg-slate-100 rounded-full transition text-slate-400 hover:text-slate-800">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar bg-slate-50">
+            <div id="empty-cart-msg" class="flex flex-col items-center justify-center h-full text-center text-slate-400">
+                <div class="bg-slate-100 p-6 rounded-full mb-4">
+                    <i data-lucide="shopping-cart" class="w-12 h-12 opacity-30"></i>
+                </div>
+                <p class="font-medium text-slate-600">Keranjang masih kosong.</p>
+                <p class="text-sm mt-1">Ayo isi dengan waifu impianmu!</p>
+            </div>
+        </div>
+        <div class="p-6 border-t border-slate-100 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.02)]">
+            <div class="flex justify-between items-end mb-6">
+                <span class="text-slate-500 font-medium text-sm">Total Estimasi</span>
+                <span id="cart-total-price" class="text-2xl font-bold text-slate-800 tracking-tight">Rp 0</span>
+            </div>
+            <button onclick="checkout()" class="w-full btn-gradient text-white py-3.5 rounded-xl font-bold transition shadow-lg shadow-emerald-500/20 flex justify-center items-center gap-2 group">
+                Checkout Sekarang <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- HELP MODAL -->
+    <div id="help-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[80] hidden flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeHelp(event)">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-8 shadow-2xl relative fade-in" onclick="event.stopPropagation()">
+            <button onclick="closeHelp()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-800 transition bg-slate-100 rounded-full p-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="text-center mb-8">
+                <div class="w-14 h-14 bg-emerald-50 rounded-2xl rotate-3 flex items-center justify-center mx-auto mb-4 shadow-sm border border-emerald-100">
+                    <i data-lucide="help-circle" class="text-emerald-500 w-7 h-7"></i>
+                </div>
+                <h3 id="help-title" class="text-2xl font-bold text-slate-800">Judul Bantuan</h3>
+            </div>
+            <div id="help-content" class="text-slate-600 space-y-4 text-sm leading-relaxed max-h-[60vh] overflow-y-auto pr-2 custom-typography">
+                <!-- Konten akan diisi JS -->
+            </div>
+            <div class="mt-8 pt-4 border-t border-slate-100 text-center">
+                <button onclick="closeHelp()" class="text-emerald-600 font-bold hover:bg-emerald-50 px-8 py-2.5 rounded-full transition">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Banner -->
+    <div class="container mx-auto px-4 mt-8">
+        <div class="bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-600 rounded-[2rem] p-8 md:p-16 text-white shadow-2xl relative overflow-hidden group">
+            <!-- Background Patterns -->
+            <div class="absolute top-0 right-0 w-full h-full opacity-10" style="background-image: radial-gradient(white 2px, transparent 2px); background-size: 30px 30px;"></div>
+            <div class="absolute -right-20 -top-20 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-1000"></div>
+            <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-teal-300 opacity-20 rounded-full blur-3xl"></div>
+            
+            <div class="relative z-10 max-w-2xl">
+                <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-bold mb-6 tracking-wide border border-white/20 shadow-sm">
+                    🚀 OFFICIAL STORE TERLENGKAP
+                </div>
+                <h2 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight drop-shadow-sm">
+                    Khilaf Itu <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-amber-300">Indah</span>
+                </h2>
+                <p class="text-lg md:text-xl mb-8 opacity-90 leading-relaxed font-medium text-emerald-50">
+                    Lengkapi koleksi action figure anime original terlengkap. Dari One Piece hingga Genshin Impact, jaminan 100% Original no KW.
+                </p>
+                <div class="flex gap-4">
+                    <button onclick="document.getElementById('catalog-start').scrollIntoView({behavior: 'smooth'})" class="bg-white text-emerald-600 font-bold px-8 py-3.5 rounded-full hover:bg-emerald-50 transition shadow-lg transform hover:-translate-y-1">
+                        Mulai Belanja
+                    </button>
+                    <!-- UPDATED BUTTON FOR ABOUT US -->
+                    <button onclick="toggleModal('about-modal')" class="bg-emerald-700/30 backdrop-blur text-white font-bold px-8 py-3.5 rounded-full hover:bg-emerald-700/50 transition border border-white/20">
+                        Tentang Kami
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="container mx-auto px-4 py-12 flex flex-col lg:flex-row gap-10" id="catalog-start">
+        
+        <!-- Product Grid (Dynamic Content) -->
+        <div class="flex-1">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-1.5 h-8 bg-gradient-to-b from-emerald-400 to-teal-600 rounded-full"></div>
+                    <h3 id="catalog-title" class="text-2xl font-bold text-slate-800">Katalog Lengkap</h3>
+                </div>
+                <!-- FIXED SEE ALL LINK -->
+                <button 
+                    onclick="resetView()" 
+                    class="text-emerald-600 font-bold cursor-pointer hover:bg-emerald-50 px-4 py-2 rounded-lg transition-all flex items-center gap-2 group text-sm"
+                >
+                    Lihat Semua
+                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </button>
+            </div>
+
+            <!-- Search Result Message -->
+            <div id="search-message" class="hidden mb-8 p-4 bg-emerald-50/50 text-emerald-800 rounded-2xl text-sm border border-emerald-100/50 flex items-center gap-3 shadow-sm backdrop-blur-sm">
+                <div class="bg-white p-1.5 rounded-lg shadow-sm">
+                    <i data-lucide="search" class="w-4 h-4 text-emerald-500"></i>
+                </div>
+                <span class="font-medium">Menampilkan hasil pencarian...</span>
+            </div>
+
+            <!-- This container will hold either Categories OR Search Results -->
+            <div id="main-catalog-container" class="space-y-16">
+                <!-- Content Injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Pembeli Section -->
+    <div class="bg-white border-t border-slate-200 mt-12 py-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-slate-50 opacity-50" style="background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 20px 20px;"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="flex items-center gap-3 mb-8 justify-center">
+                <div class="bg-emerald-100 p-2 rounded-xl text-emerald-600">
+                    <i data-lucide="activity" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800">Transaksi Terkini (Live)</h3>
+            </div>
+            
+            <div class="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-xl max-w-4xl mx-auto">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 text-slate-500 text-xs font-bold uppercase tracking-wider border-b border-slate-100">
+                            <tr>
+                                <th class="px-6 py-5">Pembeli</th>
+                                <th class="px-6 py-5">Barang</th>
+                                <th class="px-6 py-5">Kota</th>
+                                <th class="px-6 py-5">Waktu</th>
+                                <th class="px-6 py-5">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="buyer-list" class="divide-y divide-slate-50">
+                            <!-- Data pembeli akan dirender oleh JavaScript di sini -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium flex items-center justify-center gap-2">
+                        <span class="relative flex h-2.5 w-2.5">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                        </span>
+                        Data diperbarui secara otomatis (Real-time).
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-300 pt-20 pb-10 mt-auto border-t border-slate-800 relative">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <!-- Brand -->
+                <div class="col-span-1 md:col-span-2">
+                    <h2 class="text-3xl font-extrabold text-white mb-6 tracking-tight flex items-center gap-2">
+                        <span class="text-emerald-500">✦</span> tokopaedi
+                    </h2>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-sm mb-6">
+                        Platform jual beli action figure terpercaya se-Indonesia. 
+                        Kami menjamin keaslian barang (no bootleg) dan keamanan packing agar waifu sampai dengan selamat ke pelukanmu.
+                    </p>
+                    <div class="flex gap-3">
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-pink-600 hover:text-white transition cursor-pointer group">
+                            <i data-lucide="instagram" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
+                        <!-- Twitter / X -->
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-sky-500 hover:text-white transition cursor-pointer group">
+                            <i data-lucide="twitter" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-blue-600 hover:text-white transition cursor-pointer group">
+                            <i data-lucide="facebook" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
+                        <!-- WhatsApp -->
+                        <a href="https://wa.me/62895620068767" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-green-500 hover:text-white transition cursor-pointer group">
+                            <i data-lucide="message-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links -->
+                <div>
+                    <h3 class="text-white font-bold mb-6 text-lg">Bantuan</h3>
+                    <ul class="space-y-3 text-sm">
+                        <li onclick="showHelp('cara-belanja')" class="hover:text-emerald-400 cursor-pointer transition flex items-center gap-2 group">
+                            <span class="w-1.5 h-1.5 bg-slate-600 rounded-full group-hover:bg-emerald-500 transition"></span> Cara Belanja
+                        </li>
+                        <li onclick="showHelp('pengembalian')" class="hover:text-emerald-400 cursor-pointer transition flex items-center gap-2 group">
+                            <span class="w-1.5 h-1.5 bg-slate-600 rounded-full group-hover:bg-emerald-500 transition"></span> Pengembalian Barang
+                        </li>
+                        <li onclick="showHelp('pembayaran')" class="hover:text-emerald-400 cursor-pointer transition flex items-center gap-2 group">
+                            <span class="w-1.5 h-1.5 bg-slate-600 rounded-full group-hover:bg-emerald-500 transition"></span> Konfirmasi Pembayaran
+                        </li>
+                        <li onclick="showHelp('hubungi')" class="hover:text-emerald-400 cursor-pointer transition flex items-center gap-2 group">
+                            <span class="w-1.5 h-1.5 bg-slate-600 rounded-full group-hover:bg-emerald-500 transition"></span> Hubungi Kami
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Download App -->
+                <div>
+                    <h3 class="text-white font-bold mb-6 text-lg">Unduh Aplikasi</h3>
+                    <div class="space-y-3">
+                        <a href="https://play.google.com/store/apps" target="_blank" rel="noopener noreferrer" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-3 rounded-xl flex items-center gap-3 transition w-full border border-slate-700 group">
+                            <i data-lucide="play" class="w-6 h-6 fill-current group-hover:text-emerald-500 transition-colors"></i>
+                            <div class="text-left">
+                                <div class="text-[10px] uppercase text-slate-400 font-bold">Get it on</div>
+                                <div class="text-sm font-bold leading-none">Google Play</div>
+                            </div>
+                        </a>
+                        <a href="https://www.apple.com/app-store/" target="_blank" rel="noopener noreferrer" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-3 rounded-xl flex items-center gap-3 transition w-full border border-slate-700 group">
+                            <i data-lucide="apple" class="w-6 h-6 fill-current group-hover:text-slate-300 transition-colors"></i>
+                            <div class="text-left">
+                                <div class="text-[10px] uppercase text-slate-400 font-bold">Download on</div>
+                                <div class="text-sm font-bold leading-none">App Store</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 pt-8 text-center text-sm text-slate-500">
+                &copy; 2024 Tokopaedi Indonesia. Hak Cipta Dilindungi Undang-undang. <br>
+                <span class="text-xs opacity-60">Dibuat dengan ❤️ dan sedikit khilaf.</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // =================================================================
+        // LANDING PAGE LOGIC
+        // =================================================================
+        function enterSite() {
+            const landingPage = document.getElementById('landing-page');
+            landingPage.classList.add('landing-hidden');
+            setTimeout(() => {
+                landingPage.style.display = 'none';
+            }, 800); // Match transition duration
+        }
+
+        // =================================================================
+        // DATABASE PRODUK
+        // =================================================================
+        const products = [
+            // === ONE PIECE ===
+            { 
+                id: 1, 
+                name: "Luffy Gear 5 - SH Figuarts", 
+                image: "img/image_11c603.jpeg", 
+                price: 1250000, 
+                rating: 4.9, 
+                sold: 120, 
+                anime: "One Piece",
+                desc: "Figure Monkey D. Luffy dalam wujud Gear 5 (Nika). Dilengkapi dengan artikulasi fleksibel untuk pose dinamis yang konyol namun epik. Material PVC berkualitas tinggi dengan cat yang detail."
+            },
+            {
+                id: 101,
+                name: "Roronoa Zoro - Wano Kuni",
+                image: "img/zoro.jpg", 
+                price: 980000, 
+                rating: 4.8,
+                sold: 85,
+                anime: "One Piece",
+                desc: "Zoro dengan kostum Wano Kuni (Zorojuro). Detail pedang Enma yang sangat presisi."
+            },
+            {
+                id: 102,
+                name: "Vinsmoke Sanji - Onigashima",
+                image: "img/sanji.jpg",
+                price: 950000,
+                rating: 4.8,
+                sold: 90,
+                anime: "One Piece",
+                desc: "Koki bajak laut Topi Jerami dengan setelan jas merah marun Onigashima. Efek api di kaki sangat realistis."
+            },
+            {
+                id: 103,
+                name: "Portgas D. Ace - Fire Fist",
+                image: "img/ace.jpg",
+                price: 1100000,
+                rating: 4.9,
+                sold: 150,
+                anime: "One Piece",
+                desc: "Kakak Luffy dengan kekuatan Mera Mera no Mi. Pose tinju api legendaris."
+            },
+            {
+                id: 104,
+                name: "Nami - Wano Kuni",
+                image: "img/nami.jpg",
+                price: 850000,
+                rating: 4.7,
+                sold: 70,
+                anime: "One Piece",
+                desc: "Navigator cantik dengan pakaian kunoichi Wano. Dilengkapi Clima Tact terbaru."
+            },
+
+            // === JUJUTSU KAISEN ===
+            { 
+                id: 2, 
+                name: "Gojo Satoru - Shibuya Arc", 
+                image: "img/gojo.jpg", 
+                price: 850000, 
+                rating: 5.0, 
+                sold: 342, 
+                anime: "Jujutsu Kaisen",
+                desc: "Penyihir Jujutsu terkuat, Satoru Gojo versi Shibuya Incident. Hadir dengan wajah tanpa penutup mata."
+            },
+            {
+                id: 201,
+                name: "Yuji Itadori - Black Flash",
+                image: "img/yuji.jpg",
+                price: 700000,
+                rating: 4.8,
+                sold: 200,
+                anime: "Jujutsu Kaisen",
+                desc: "Wadah Sukuna dalam pose serangan Black Flash. Efek kilat hitam yang keren."
+            },
+            {
+                id: 202,
+                name: "Megumi Fushiguro - Divine Dog",
+                image: "img/megumi.jpg",
+                price: 750000,
+                rating: 4.7,
+                sold: 180,
+                anime: "Jujutsu Kaisen",
+                desc: "Pengguna teknik Ten Shadows dengan anjing bayangannya."
+            },
+            {
+                id: 203,
+                name: "Nobara Kugisaki - Straw Doll",
+                image: "img/nobara.jpg",
+                price: 720000,
+                rating: 4.8,
+                sold: 160,
+                anime: "Jujutsu Kaisen",
+                desc: "Penyihir wanita tangguh dengan palu dan pakunya."
+            },
+
+            // === DEMON SLAYER ===
+            {
+                id: 9,
+                name: "Tanjiro Kamado - Hinokami Kagura",
+                image: "img/tanjiro.jpg", 
+                price: 750000,
+                rating: 4.9,
+                sold: 400,
+                anime: "Demon Slayer",
+                desc: "Tanjiro saat menggunakan teknik Hinokami Kagura. Efek api transparan yang sangat memukau."
+            },
+            {
+                id: 10,
+                name: "Nezuko Kamado - Blood Demon Art",
+                image: "img/nezuko.jpg", 
+                price: 1100000,
+                rating: 4.8,
+                sold: 215,
+                anime: "Demon Slayer",
+                desc: "Nezuko dalam wujud iblis penuh. Detail ukiran darah yang menyala."
+            },
+            {
+                id: 301,
+                name: "Zenitsu Agatsuma - Thunder Breathing",
+                image: "img/zenitsu.jpg",
+                price: 740000,
+                rating: 4.8,
+                sold: 300,
+                anime: "Demon Slayer",
+                desc: "Zenitsu dalam mode tidur siap menebas dengan kecepatan kilat."
+            },
+            {
+                id: 302,
+                name: "Inosuke Hashibira - Beast Breathing",
+                image: "img/inosuke.jpg",
+                price: 730000,
+                rating: 4.7,
+                sold: 250,
+                anime: "Demon Slayer",
+                desc: "Inosuke dengan dua pedang bergerigi dan topeng babi hutan."
+            },
+            {
+                id: 303,
+                name: "Kyojuro Rengoku - Flame Hashira",
+                image: "img/rengoku.jpg",
+                price: 1200000,
+                rating: 5.0,
+                sold: 500,
+                anime: "Demon Slayer",
+                desc: "Hashira Api yang membara. Umai!"
+            },
+
+            // === GENSHIN IMPACT ===
+            {
+                id: 11,
+                name: "Raiden Shogun - Statue of Her Excellency",
+                image: "img/raiden.jpg", 
+                price: 2450000,
+                rating: 5.0,
+                sold: 500,
+                anime: "Genshin Impact",
+                desc: "Yang Mulia Narukami Ogosho. Figure skala 1/7 dengan detail kimono yang luar biasa."
+            },
+            {
+                id: 12,
+                name: "Hu Tao - Ghost Ver.",
+                image: "img/hutao.jpg", 
+                price: 1850000,
+                rating: 4.9,
+                sold: 670,
+                anime: "Genshin Impact",
+                desc: "Direktur Wangsheng Funeral Parlor. Hantu kecilnya bisa menyala dalam gelap (Glow in the Dark)!"
+            },
+            {
+                id: 401,
+                name: "Zhongli - Rex Lapis",
+                image: "img/zhongli.jpg",
+                price: 2300000,
+                rating: 5.0,
+                sold: 600,
+                anime: "Genshin Impact",
+                desc: "Archon Geo dengan wibawa yang tak tertandingi. Membawa tombak Vortex Vanquisher."
+            },
+            {
+                id: 402,
+                name: "Ganyu - Plenilune Gaze",
+                image: "img/ganyu.jpg",
+                price: 2100000,
+                rating: 4.9,
+                sold: 550,
+                anime: "Genshin Impact",
+                desc: "Sekretaris Liyue Qixing yang anggun dengan busur Amos Bow."
+            },
+            {
+                id: 403,
+                name: "Xiao - Vigilant Yaksha",
+                image: "img/xiao.jpg",
+                price: 2200000,
+                rating: 4.9,
+                sold: 580,
+                anime: "Genshin Impact",
+                desc: "Yaksha penjaga Liyue dengan topeng iblisnya."
+            },
+
+            // === DRAGON BALL ===
+            {
+                id: 13,
+                name: "Son Goku - Super Saiyan Blue",
+                image: "img/goku.jpg", 
+                price: 650000,
+                rating: 4.7,
+                sold: 150,
+                anime: "Dragon Ball Z",
+                desc: "Goku dalam wujud SSGSS. Rambut biru metalik yang keren abis."
+            },
+            {
+                id: 14,
+                name: "Vegeta - Prince of Saiyans",
+                image: "img/vegeta.jpg", 
+                price: 640000,
+                rating: 4.6,
+                sold: 120,
+                anime: "Dragon Ball Z",
+                desc: "Pangeran Saiyan dengan armor tempur klasik. Ekspresi sombong yang khas."
+            },
+            {
+                id: 501,
+                name: "Gohan Beast - Super Hero",
+                image: "img/gohan.jpg",
+                price: 700000,
+                rating: 4.8,
+                sold: 100,
+                anime: "Dragon Ball Z",
+                desc: "Wujud terkuat Gohan dari film Super Hero. Rambut perak yang ganas."
+            },
+            {
+                id: 502,
+                name: "Golden Frieza",
+                image: "img/frieza.jpg",
+                price: 680000,
+                rating: 4.7,
+                sold: 90,
+                anime: "Dragon Ball Z",
+                desc: "Kaisar alam semesta dalam wujud emasnya yang berkilau."
+            },
+            {
+                id: 503,
+                name: "Broly - Super Saiyan Full Power",
+                image: "img/broly.jpg",
+                price: 850000,
+                rating: 4.9,
+                sold: 130,
+                anime: "Dragon Ball Z",
+                desc: "Saiyan legendaris dengan otot yang sangat besar dan detail."
+            },
+
+            // === ATTACK ON TITAN ===
+            {
+                id: 15,
+                name: "Levi Ackerman - Cleaning Ver.",
+                image: "img/levi.jpg", 
+                price: 1200000,
+                rating: 5.0,
+                sold: 999,
+                anime: "Attack on Titan",
+                desc: "Kapten Levi dengan peralatan bersih-bersih legendaris. Debu tidak akan selamat."
+            },
+            {
+                id: 601,
+                name: "Eren Yeager - Attack Titan",
+                image: "img/eren.jpg",
+                price: 1500000,
+                rating: 4.9,
+                sold: 450,
+                anime: "Attack on Titan",
+                desc: "Eren dalam wujud Attack Titan yang sedang mengaum."
+            },
+            {
+                id: 602,
+                name: "Mikasa Ackerman - Final Season",
+                image: "img/mikasa.jpg",
+                price: 1100000,
+                rating: 4.8,
+                sold: 400,
+                anime: "Attack on Titan",
+                desc: "Mikasa dengan perlengkapan anti-personel terbaru dan syal merahnya."
+            },
+
+            // === NARUTO ===
+            { 
+                id: 6, 
+                name: "Naruto Sage Mode - Grandista", 
+                image: "img/naruto.jpg", 
+                price: 650000, 
+                rating: 4.6, 
+                sold: 115, 
+                anime: "Naruto",
+                desc: "Figure Grandista Naruto Uzumaki dalam mode Sennin (Sage Mode). Ukuran besar 23cm dengan detail gulungan jurus di punggung. Pose berdiri gagah pelindung Konoha."
+            },
+            {
+                id: 701,
+                name: "Sasuke Uchiha - Rinnegan",
+                image: "img/sasuke.jpg",
+                price: 680000,
+                rating: 4.7,
+                sold: 110,
+                anime: "Naruto",
+                desc: "Sasuke dewasa dengan mata Rinnegan dan pedang Kusanagi."
+            },
+            {
+                id: 702,
+                name: "Kakashi Hatake - Anbu",
+                image: "img/kakashi.jpg",
+                price: 720000,
+                rating: 4.8,
+                sold: 130,
+                anime: "Naruto",
+                desc: "Kakashi muda saat menjadi anggota Anbu Black Ops."
+            },
+            {
+                id: 703,
+                name: "Itachi Uchiha - Akatsuki",
+                image: "img/itachi.jpg",
+                price: 750000,
+                rating: 4.9,
+                sold: 160,
+                anime: "Naruto",
+                desc: "Itachi dengan jubah Akatsuki dan gagak genjutsu."
+            },
+
+            // === SPY X FAMILY ===
+            { 
+                id: 5, 
+                name: "Anya Forger - Look Up Series", 
+                image: "img/anya.jpg", 
+                price: 450000, 
+                rating: 4.9, 
+                sold: 210, 
+                anime: "Spy x Family",
+                desc: "Anya Forger dari seri Look Up. Kepala bisa digerakkan untuk menatapmu dari meja kerja. Ekspresi 'Waku Waku' yang menggemaskan akan mencerahkan harimu."
+            },
+            {
+                id: 801,
+                name: "Loid Forger - Twilight",
+                image: "img/loid.jpg",
+                price: 550000,
+                rating: 4.8,
+                sold: 150,
+                anime: "Spy x Family",
+                desc: "Agen Twilight yang tampan dan siap menjalankan misi Operation Strix."
+            },
+            {
+                id: 802,
+                name: "Yor Forger - Thorn Princess",
+                image: "img/yor.jpg",
+                price: 600000,
+                rating: 4.9,
+                sold: 190,
+                anime: "Spy x Family",
+                desc: "Yor dalam pakaian pembunuhnya yang mematikan namun anggun."
+            },
+
+            // === CHAINSAW MAN ===
+            { 
+                id: 7, 
+                name: "Makima - Chainsaw Man 1/7 Scale", 
+                image: "img/makima.jpg", 
+                price: 2100000, 
+                rating: 4.8, 
+                sold: 88, 
+                anime: "Chainsaw Man",
+                desc: "Scale Figure 1/7 Makima. Memakai coat hitam panjang dengan pose berjalan yang tenang namun mengintimidasi. Detail mata spiral yang akurat sesuai manga."
+            },
+            {
+                id: 901,
+                name: "Power - Blood Fiend",
+                image: "img/power.jpg",
+                price: 900000,
+                rating: 4.8,
+                sold: 120,
+                anime: "Chainsaw Man",
+                desc: "Power dengan palu darah raksasanya. Pose yang penuh energi dan kekacauan."
+            },
+            {
+                id: 902,
+                name: "Denji - Chainsaw Man",
+                image: "img/denji.jpg",
+                price: 950000,
+                rating: 4.9,
+                sold: 140,
+                anime: "Chainsaw Man",
+                desc: "Denji dalam wujud Chainsaw Man lengkap dengan darah di gergajinya."
+            },
+
+            // === GUNDAM ===
+            { 
+                id: 4, 
+                name: "Gundam Aerial HG 1/144", 
+                image: "img/gundam.jpg", 
+                price: 280000, 
+                rating: 4.7, 
+                sold: 890, 
+                anime: "Gundam",
+                desc: "Model Kit High Grade 1/144 Gundam Aerial dari seri 'The Witch from Mercury'. Teknologi GUND-ARM yang direplikasi dengan sempurna. Shield bit bisa dipisah menjadi bit staves."
+            },
+            {
+                id: 1001,
+                name: "Gundam Barbatos Lupus Rex",
+                image: "img/barbatos.jpg",
+                price: 350000,
+                rating: 4.9,
+                sold: 600,
+                anime: "Gundam",
+                desc: "Sang iblis dari Mars. Dilengkapi dengan mace raksasa dan ekor tajam."
+            },
+            {
+                id: 1002,
+                name: "RX-78-2 Gundam - Beyond Global",
+                image: "img/rx78.jpg",
+                price: 300000,
+                rating: 4.8,
+                sold: 1000,
+                anime: "Gundam",
+                desc: "Gundam klasik dengan artikulasi modern yang luar biasa."
+            },
+
+            // === LAINNYA ===
+            { 
+                id: 3, 
+                name: "Hatsune Miku - 15th Anniversary", 
+                image: "img/miku.jpg", 
+                price: 3200000, 
+                rating: 4.8, 
+                sold: 56, 
+                anime: "Vocaloid",
+                desc: "Scale Figure spesial 15th Anniversary Hatsune Miku. Tema stroberi yang manis dengan detail dress yang sangat rumit dan indah. Masterpiece untuk kolektor sejati."
+            },
+            {
+                id: 1101,
+                name: "Megurine Luka - Temptation",
+                image: "img/luka.jpg",
+                price: 1500000,
+                rating: 4.7,
+                sold: 40,
+                anime: "Vocaloid",
+                desc: "Figure Luka dengan kostum yang elegan dan dewasa."
+            },
+            { 
+                id: 8, 
+                name: "Rem - Crystal Dress Ver.", 
+                image: "img/rem.jpg", 
+                price: 4500000, 
+                rating: 5.0, 
+                sold: 12, 
+                anime: "Re:Zero",
+                desc: "Salah satu figure Rem tercantik yang pernah dibuat. Versi Crystal Dress menampilkan efek es transparan yang mengelilingi Rem dengan gaun pesta yang elegan."
+            },
+            {
+                id: 1201,
+                name: "Emilia - Crystal Dress Ver.",
+                image: "img/emilia.jpg",
+                price: 4600000,
+                rating: 5.0,
+                sold: 10,
+                anime: "Re:Zero",
+                desc: "Pasangan set Rem Crystal Dress. Emilia terlihat sangat memukau dengan efek kristal es."
+            },
+            {
+                id: 1202,
+                name: "Ram",
+                image: "img/ram.jpg",
+                price: 4400000,
+                rating: 4.9,
+                sold: 8,
+                anime: "Re:Zero",
+                desc: "Kakak Rem yang tak kalah cantik dengan balutan gaun kristal merah muda."
+            }
+        ];
+
+        // --- LIVE DATA SIMULATION ---
+        const buyers = [
+            { id: 101, name: "Agus Wibu", item: "Gojo Satoru", date: "Baru saja", status: "Diproses", city: "Jakarta" },
+            { id: 102, name: "Siti Ackerman", item: "Luffy Gear 5", date: "5 menit lalu", status: "Dikemas", city: "Bandung" },
+            { id: 103, name: "Budi Uchiha", item: "Gundam Aerial", date: "12 menit lalu", status: "Dikirim", city: "Surabaya" },
+            { id: 104, name: "Dewi Chan", item: "Anya Forger", date: "30 menit lalu", status: "Selesai", city: "Yogyakarta" },
+            { id: 105, name: "Rizky Yeager", item: "Makima Scale", date: "1 jam lalu", status: "Menunggu Kurir", city: "Medan" },
+        ];
+
+        const randomNames = ["Agus", "Budi", "Citra", "Dewi", "Eko", "Fajar", "Gita", "Hendra", "Indah", "Joko", "Kiki", "Lina", "Mamat", "Nina", "Oscar", "Putri", "Qori", "Rudi", "Siti", "Tono", "Umar", "Vina", "Wawan", "Xena", "Yoga", "Zainal"];
+        const randomSuffixes = ["Wibu", "Ackerman", "Uchiha", "Chan", "Yeager", "San", "Kun", "Sama", "Senpai", "Dono"];
+        const cities = ["Jakarta", "Bandung", "Surabaya", "Yogyakarta", "Medan", "Semarang", "Makassar", "Denpasar", "Malang", "Bekasi", "Tangerang", "Depok"];
+
+        const helpData = {
+            'cara-belanja': {
+                title: 'Cara Belanja',
+                content: `
+                    <ol class="list-decimal list-inside space-y-3">
+                        <li class="pl-2"><strong>Pilih Waifu/Husbando:</strong> Cari action figure idamanmu melalui fitur pencarian atau katalog.</li>
+                        <li class="pl-2"><strong>Masukkan Keranjang:</strong> Klik tombol "+ Keranjang" pada produk yang diinginkan.</li>
+                        <li class="pl-2"><strong>Cek Keranjang:</strong> Klik ikon keranjang di pojok kanan atas untuk melihat total belanjaan.</li>
+                        <li class="pl-2"><strong>Checkout:</strong> Klik tombol "Checkout Sekarang". Siapkan dompetmu karena khilaf butuh modal.</li>
+                        <li class="pl-2"><strong>Tunggu Paket:</strong> Paket akan dikirim menggunakan kurir kilat.</li>
+                    </ol>`
+            },
+            'pengembalian': {
+                title: 'Kebijakan Pengembalian',
+                content: `
+                    <p class="mb-3 font-medium">Kami menerima pengembalian barang dengan syarat:</p>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li>Wajib menyertakan video <strong>Unboxing</strong> tanpa jeda.</li>
+                        <li>Barang rusak saat pengiriman atau cacat pabrik parah.</li>
+                        <li>Kesalahan kirim barang (misal: Pesan Luffy, yang datang Naruto).</li>
+                    </ul>
+                    <p class="mt-4 text-rose-500 text-xs font-medium italic bg-rose-50 p-2 rounded-lg border border-rose-100">*Tidak berlaku jika alasan pengembalian adalah "Istri marah ketahuan beli figure".</p>`
+            },
+            'pembayaran': {
+                title: 'Konfirmasi Pembayaran',
+                content: `
+                    <p>Pembayaran akan diverifikasi otomatis jika menggunakan Virtual Account atau E-Wallet.</p>
+                    <p class="mt-4 mb-2 font-medium">Jika transfer manual, silakan kirim bukti transfer ke:</p>
+                    <div class="bg-slate-100 p-4 rounded-xl font-mono text-sm text-slate-700 border border-slate-200">
+                        WhatsApp Admin: 0812-3456-7890<br>
+                        Format: [No. Pesanan] - [Nama Pengirim]
+                    </div>`
+            },
+            'hubungi': {
+                title: 'Hubungi Kami',
+                content: `
+                    <p class="mb-4">Butuh bantuan curhat soal figure?</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-lg hover:bg-white hover:shadow-md transition border border-slate-100">
+                            <div class="bg-emerald-100 p-2 rounded-full text-emerald-600"><i data-lucide="phone" class="w-5 h-5"></i></div>
+                            <span class="font-medium text-slate-700">021-555-0000 (Hotline)</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-lg hover:bg-white hover:shadow-md transition border border-slate-100">
+                            <div class="bg-emerald-100 p-2 rounded-full text-emerald-600"><i data-lucide="mail" class="w-5 h-5"></i></div>
+                            <span class="font-medium text-slate-700">support@tokopaedi.id</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-lg hover:bg-white hover:shadow-md transition border border-slate-100">
+                            <div class="bg-emerald-100 p-2 rounded-full text-emerald-600"><i data-lucide="map-pin" class="w-5 h-5"></i></div>
+                            <span class="font-medium text-slate-700">Jl. Akihabara No. 404, Jakarta Selatan</span>
+                        </div>
+                    </div>`
+            }
+        };
+
+        // --- STATE ---
+        let cart = [];
+        let isCartOpen = false;
+
+        // --- HELPERS ---
+        function formatRupiah(price) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(price);
+        }
+
+        // --- AUTH & MODAL LOGIC ---
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+            } else {
+                modal.classList.add('hidden');
+            }
+        }
+
+        function closeModal(modalId, event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        function switchAuthModal(target) {
+            document.getElementById('login-modal').classList.add('hidden');
+            document.getElementById('register-modal').classList.add('hidden');
+            toggleModal(target + '-modal');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white inline-block"></div>';
+            
+            setTimeout(() => {
+                document.getElementById('login-modal').classList.add('hidden');
+                document.getElementById('register-modal').classList.add('hidden');
+                
+                showToast('Login Berhasil! Selamat berbelanja.', 'green');
+                btn.innerHTML = originalText;
+            }, 1500);
+        }
+
+        // --- PRODUCT DETAIL LOGIC ---
+        function openProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if(!product) return;
+
+            document.getElementById('detail-image').src = product.image;
+            document.getElementById('detail-anime').innerText = product.anime;
+            document.getElementById('detail-name').innerText = product.name;
+            document.getElementById('detail-rating').innerText = `${product.rating}`;
+            document.getElementById('detail-sold').innerText = `Terjual ${product.sold}+`;
+            document.getElementById('detail-price').innerText = formatRupiah(product.price);
+            document.getElementById('detail-desc').innerText = product.desc;
+            
+            const btn = document.getElementById('detail-btn-cart');
+            btn.onclick = function() {
+                addToCart(product.id);
+            };
+
+            toggleModal('product-modal');
+        }
+
+        // --- SEARCH LOGIC ---
+        function handleSearch(keyword) {
+            const mainContainer = document.getElementById('main-catalog-container');
+            keyword = keyword.toLowerCase().trim();
+            const msg = document.getElementById('search-message');
+
+            if (keyword.length === 0) {
+                // If search is empty, go back to categories
+                resetView();
+                return;
+            }
+
+            // Filter products
+            const filteredProducts = products.filter(product => {
+                return product.name.toLowerCase().includes(keyword) || 
+                       product.anime.toLowerCase().includes(keyword);
+            });
+            
+            msg.classList.remove('hidden');
+            msg.querySelector('span').innerText = `Menampilkan ${filteredProducts.length} hasil untuk "${keyword}"`;
+            
+            // Render Flat Grid for Search Results
+            const html = `
+                <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                    ${filteredProducts.length > 0 ? filteredProducts.map(product => createProductCard(product)).join('') : 
+                    '<div class="col-span-full text-center py-16 text-slate-400 bg-white rounded-2xl border border-slate-100 shadow-sm"><i data-lucide="ghost" class="w-12 h-12 mx-auto mb-3 opacity-50"></i><p>Tidak ada barang yang ditemukan.</p></div>'}
+                </div>
+            `;
+            
+            mainContainer.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function resetView() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-message').classList.add('hidden');
+            
+            // Scroll to catalog title properly
+            const catalogTitle = document.getElementById('catalog-start');
+            if(catalogTitle) {
+                catalogTitle.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
+            
+            renderCatalog();
+        }
+
+        // --- HELP MODAL LOGIC ---
+        function showHelp(key) {
+            const modal = document.getElementById('help-modal');
+            const titleEl = document.getElementById('help-title');
+            const contentEl = document.getElementById('help-content');
+            
+            const data = helpData[key];
+            if (data) {
+                titleEl.innerText = data.title;
+                contentEl.innerHTML = data.content;
+                modal.classList.remove('hidden');
+                lucide.createIcons();
+            }
+        }
+
+        function closeHelp(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('help-modal').classList.add('hidden');
+        }
+
+        // --- LIVE TRANSACTIONS LOGIC ---
+        function addRandomTransaction() {
+            const name = randomNames[Math.floor(Math.random() * randomNames.length)] + " " + randomSuffixes[Math.floor(Math.random() * randomSuffixes.length)];
+            const product = products[Math.floor(Math.random() * products.length)].name;
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            
+            const newBuyer = {
+                id: Date.now(),
+                name: name,
+                item: product,
+                city: city,
+                date: "Baru saja",
+                status: "Menunggu Konfirmasi"
+            };
+
+            buyers.forEach(b => {
+                if(b.date === "Baru saja") b.date = "1 menit lalu";
+                else if(b.date.includes("menit")) {
+                    let currentMin = parseInt(b.date);
+                    if(!isNaN(currentMin)) b.date = `${currentMin + Math.floor(Math.random() * 3)} menit lalu`;
+                }
+            });
+
+            buyers.unshift(newBuyer);
+            if (buyers.length > 5) buyers.pop();
+
+            renderBuyers(true);
+        }
+
+        function startLiveTransactions() {
+            renderBuyers();
+            setInterval(addRandomTransaction, 4000);
+        }
+
+        // --- CORE FUNCTIONS (REFACTORED) ---
+
+        // Helper to create card HTML string
+        function createProductCard(product) {
+            return `
+                <div class="bg-white border border-slate-100 rounded-2xl overflow-hidden card-hover group cursor-pointer relative" onclick="openProductDetail(${product.id})">
+                    <div class="product-img-container bg-slate-50">
+                        <img 
+                            src="${product.image}" 
+                            alt="${product.name}" 
+                            referrerpolicy="no-referrer"
+                            onerror="this.src='https://placehold.co/300x400/f1f5f9/cbd5e1?text=No+Image'"
+                            class="product-img"
+                        >
+                        <div class="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full z-10 shadow-sm border border-white/10">
+                            ${product.anime}
+                        </div>
+                    </div>
+                    <div class="p-5 flex flex-col flex-1">
+                        <h4 class="font-bold text-slate-800 text-sm md:text-base line-clamp-2 mb-2 h-11 leading-snug group-hover:text-emerald-600 transition-colors">
+                            ${product.name}
+                        </h4>
+                        <div class="font-extrabold text-lg text-emerald-600 mb-2">
+                            ${formatRupiah(product.price)}
+                        </div>
+                        <div class="flex items-center gap-1.5 mb-5 text-xs text-slate-500">
+                            <div class="flex text-amber-400">
+                                <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                            </div>
+                            <span class="text-slate-700 font-bold">${product.rating}</span>
+                            <span class="text-slate-300">|</span>
+                            <span>${product.sold}+ Terjual</span>
+                        </div>
+                        <button onclick="event.stopPropagation(); addToCart(${product.id})" class="mt-auto w-full bg-slate-50 text-emerald-600 border border-emerald-100 py-2.5 rounded-xl font-bold text-sm hover:bg-emerald-600 hover:text-white hover:border-emerald-600 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 z-10 relative flex items-center justify-center gap-2">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Keranjang
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // New function to render Categories
+        function renderCatalog() {
+            const mainContainer = document.getElementById('main-catalog-container');
+            mainContainer.innerHTML = ''; // Clear existing
+
+            // Get unique anime categories
+            const categories = [...new Set(products.map(p => p.anime))];
+
+            categories.forEach(category => {
+                const categoryProducts = products.filter(p => p.anime === category);
+                
+                // Create Section HTML
+                const sectionHTML = `
+                    <div class="category-section">
+                        <div class="flex items-center justify-between mb-6">
+                            <h4 class="text-xl font-bold text-slate-800 flex items-center gap-3">
+                                <span class="w-1.5 h-6 bg-gradient-to-b from-emerald-400 to-teal-500 rounded-full"></span>
+                                ${category}
+                            </h4>
+                            <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md uppercase tracking-wide">${categoryProducts.length} Items</span>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                            ${categoryProducts.map(product => createProductCard(product)).join('')}
+                        </div>
+                    </div>
+                `;
+                mainContainer.innerHTML += sectionHTML;
+            });
+            
+            lucide.createIcons();
+        }
+
+        function renderBuyers(animateFirst = false) {
+            const container = document.getElementById('buyer-list');
+            const html = buyers.map((buyer, index) => {
+                let statusClass = '';
+                if (buyer.status === 'Selesai') statusClass = 'bg-emerald-100 text-emerald-700 border border-emerald-200';
+                else if (buyer.status === 'Dikirim') statusClass = 'bg-sky-100 text-sky-700 border border-sky-200';
+                else if (buyer.status === 'Dikemas') statusClass = 'bg-amber-100 text-amber-700 border border-amber-200';
+                else statusClass = 'bg-slate-100 text-slate-600 border border-slate-200';
+
+                const rowClass = (index === 0 && animateFirst) ? 'new-transaction' : '';
+
+                return `
+                    <tr class="hover:bg-slate-50 transition-colors ${rowClass}">
+                        <td class="px-6 py-4 whitespace-nowrap font-medium text-slate-700 flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-xs font-bold text-slate-500 border border-slate-200 shadow-sm">
+                                ${buyer.name.charAt(0)}
+                            </div>
+                            ${buyer.name}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-slate-600 truncate max-w-[180px] font-medium text-sm">${buyer.item}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-slate-500 text-sm">${buyer.city}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-400 font-mono">${buyer.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-3 py-1 inline-flex text-[10px] uppercase tracking-wide font-bold rounded-full ${statusClass}">
+                                ${buyer.status}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            container.innerHTML = html;
+        }
+
+        // --- CART LOGIC ---
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.qty += 1;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCartUI();
+            showToast(`<b>${product.name}</b> berhasil masuk keranjang!`, 'green');
+            
+            const badge = document.getElementById('cart-badge');
+            badge.classList.remove('scale-0');
+            badge.classList.add('scale-125');
+            setTimeout(() => badge.classList.remove('scale-125'), 200);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            
+            badge.innerText = totalQty;
+            if (totalQty > 0) {
+                badge.classList.remove('hidden', 'scale-0');
+            } else {
+                badge.classList.add('scale-0');
+                setTimeout(() => {
+                    if(cart.length === 0) badge.classList.add('hidden');
+                }, 200);
+            }
+
+            const container = document.getElementById('cart-items-container');
+            const totalElement = document.getElementById('cart-total-price');
+
+            const emptyCartHTML = `
+                <div id="empty-cart-msg" class="flex flex-col items-center justify-center h-full text-center text-slate-400">
+                    <div class="bg-white p-6 rounded-full mb-4 shadow-sm border border-slate-100">
+                        <i data-lucide="shopping-cart" class="w-12 h-12 text-slate-200"></i>
+                    </div>
+                    <p class="font-bold text-slate-600">Keranjang kosong melompong.</p>
+                    <p class="text-sm mt-1 text-slate-400">Belum ada khilaf hari ini?</p>
+                </div>
+            `;
+
+            if (cart.length === 0) {
+                container.innerHTML = emptyCartHTML;
+                totalElement.innerText = formatRupiah(0);
+                lucide.createIcons();
+                return;
+            }
+            
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                total += item.price * item.qty;
+                return `
+                <div class="flex gap-4 border-b border-slate-200 pb-5 mb-1 last:border-0">
+                    <img src="${item.image}" referrerpolicy="no-referrer" class="w-20 h-20 object-cover rounded-xl bg-slate-100 border border-slate-200" 
+                         onerror="this.src='https://placehold.co/100x100/eee/999?text=X'">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-slate-800 line-clamp-2 mb-1 leading-snug">${item.name}</h4>
+                        <div class="text-emerald-600 font-extrabold text-sm mb-3">${formatRupiah(item.price)}</div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-3 bg-white border border-slate-200 rounded-lg px-2 py-1 shadow-sm">
+                                <button onclick="changeQty(${item.id}, -1)" class="text-slate-400 hover:text-emerald-600 disabled:opacity-30 transition p-1">
+                                    <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <span class="text-xs font-bold w-4 text-center text-slate-700">${item.qty}</span>
+                                <button onclick="changeQty(${item.id}, 1)" class="text-slate-400 hover:text-emerald-600 transition p-1">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                            <button onclick="removeFromCart(${item.id})" class="text-slate-400 hover:text-rose-500 transition p-1.5 hover:bg-rose-50 rounded-lg">
+                                <i data-lucide="trash-2" class="w-4.5 h-4.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+            totalElement.innerText = formatRupiah(total);
+        }
+
+        function changeQty(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+
+            item.qty += change;
+
+            if (item.qty <= 0) {
+                removeFromCart(productId);
+            } else {
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(i => i.id !== productId);
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const overlay = document.getElementById('cart-overlay');
+            const sidebar = document.getElementById('cart-sidebar');
+            isCartOpen = !isCartOpen;
+
+            if (isCartOpen) {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                sidebar.classList.remove('translate-x-full');
+            } else {
+                overlay.classList.add('opacity-0');
+                sidebar.classList.add('translate-x-full');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast("Keranjang kosong, mau beli angin?", "red");
+                return;
+            }
+            
+            const btn = document.querySelector('#cart-sidebar button[onclick="checkout()"]');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> Memproses...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                showToast("Pembayaran Berhasil! Waifu OTW ke rumahmu.", "green");
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        function showToast(message, type = "green") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const colorClass = type === "green" ? "text-emerald-600 bg-emerald-50 border-emerald-100" : "text-rose-600 bg-rose-50 border-rose-100";
+            const iconName = type === "green" ? "check-circle-2" : "alert-circle";
+            const iconColor = type === "green" ? "text-emerald-500" : "text-rose-500";
+            
+            toast.className = `px-4 py-3 rounded-xl shadow-lg shadow-slate-200 border flex items-center gap-3 toast-enter text-sm font-medium backdrop-blur-md bg-white/90 transform hover:scale-105 transition-transform duration-200 cursor-pointer ${type === "green" ? "border-emerald-100" : "border-rose-100"}`;
+            toast.innerHTML = `
+                <div class="${type === "green" ? "bg-emerald-100" : "bg-rose-100"} p-1.5 rounded-full">
+                    <i data-lucide="${iconName}" class="${iconColor} w-4 h-4"></i> 
+                </div>
+                <span class="text-slate-700">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            lucide.createIcons(); 
+
+            setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- INIT ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCatalog(); // Changed from renderProducts
+            startLiveTransactions();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
